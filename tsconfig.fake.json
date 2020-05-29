@@ -1,0 +1,6 @@
+{
+  // used by plugin to allow linting configs that contain rules from
+  // @typescript-eslint which require typechecking, to avoid having to having
+  // to juggle the parser requirement for the `project` setting.
+  "include": []
+}

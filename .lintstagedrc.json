@@ -1,0 +1,5 @@
+{
+  "**/*.{t,j}s": "eslint --fix",
+  "**/.eslint{rc,ignore}": "npm run lint",
+  "**/*.{md,json}": "prettier --write"
+}
