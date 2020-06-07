@@ -2,6 +2,8 @@ import ESLint from 'eslint';
 import requireRelative from 'require-relative';
 import { runInNewContext } from 'vm';
 
+const pathToBlankFile = require.resolve('../blank.js');
+
 const getsertCache = <T>(
   cache: Map<string, T>,
   key: string,
@@ -54,13 +56,16 @@ const createCLIEngine = (config: ESLint.Linter.Config): ESLint.CLIEngine => {
     () =>
       new ESLint.CLIEngine({
         useEslintrc: false,
+        ignorePath: pathToBlankFile,
+        ignorePattern: ['!node_modules/*'],
         cache: false,
         envs: ['node'],
         baseConfig: {
           ...config,
           parserOptions: {
             ...config.parserOptions,
-            project: require.resolve('../../tsconfig.fake.json')
+            project: require.resolve('../../tsconfig.fake.json'),
+            projectFolderIgnoreList: []
           }
         }
       }),
@@ -343,7 +348,10 @@ const collectConfigInfoFromESLint = (
     }
 
     try {
-      const results = createCLIEngine(theConfig).executeOnText('');
+      const results = createCLIEngine(theConfig).executeOnText(
+        '',
+        pathToBlankFile
+      );
 
       return {
         deprecatedRules: results.usedDeprecatedRules,

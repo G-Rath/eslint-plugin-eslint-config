@@ -91,7 +91,7 @@ ruleTester.run('no-invalid-config', rule, {
           data: {
             message: dedent`
               Unable to parse error from ESLint: Error while loading rule 'prettier/erroneous-rule': explosions!
-              Occurred while linting <text>
+              Occurred while linting ${require.resolve('../../../src/blank.js')}
             `.trim()
           },
           line: 1,
