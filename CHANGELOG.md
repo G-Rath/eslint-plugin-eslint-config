@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/g-rath/eslint-plugin-eslint-config/compare/v1.0.1...v1.0.2) (2020-06-07)
+
+
+### Bug Fixes
+
+* support configs with `[@typescript-eslint](https://github.com/typescript-eslint)` type-checking rules ([d3fd59c](https://github.com/g-rath/eslint-plugin-eslint-config/commit/d3fd59cb028e29d4220ad767377d0ee53a703022))
+
 ## [1.0.1](https://github.com/g-rath/eslint-plugin-eslint-config/compare/v1.0.0...v1.0.1) (2020-06-07)
 
 
