@@ -92,6 +92,23 @@ export const mockEslintPluginPrettier = (): void => {
           create() {
             return {};
           }
+        }),
+        'erroneous-rule': ESLintUtils.RuleCreator(name => name)({
+          name: __filename,
+          meta: {
+            type: 'problem',
+            docs: {
+              description: 'Fake rule that always throws, for use in testing',
+              category: 'Best Practices',
+              recommended: 'warn'
+            },
+            messages: {},
+            schema: []
+          },
+          defaultOptions: [],
+          create() {
+            throw new Error('explosions!');
+          }
         })
       }
     };

@@ -225,12 +225,11 @@ const tryParseAsInvalidConfigError = (
   const [, reason] =
     /ESLint configuration (?:.+) is invalid:(.+)/isu.exec(
       error.message.trim()
-    ) ?? /* istanbul ignore next */ [];
+    ) ?? [];
 
   return reason //
     ? { type: ESLintErrorType.InvalidConfig, reason }
-    : /* istanbul ignore next */
-      null;
+    : null;
 };
 
 const errorParsers: ESLintErrorParser[] = [
@@ -250,10 +249,8 @@ const parseESLintError = (error: Error): ESLintError => {
     }
   }
 
-  /* istanbul ignore next */
   error.message = `Unable to parse error from ESLint: ${error.message}`;
 
-  /* istanbul ignore next */
   throw error;
 };
 

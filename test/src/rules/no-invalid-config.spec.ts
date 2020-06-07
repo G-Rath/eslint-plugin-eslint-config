@@ -2,9 +2,11 @@ import { TSESLint } from '@typescript-eslint/experimental-utils';
 import dedent from 'dedent';
 import rule from '../../../src/rules/no-invalid-config';
 import { ESLintError, ESLintErrorType } from '../../../src/rules/utils';
-import { RuleTester } from '../../helpers';
+import { RuleTester, mockEslintPluginPrettier } from '../../helpers';
 
 const ruleTester = new RuleTester();
+
+mockEslintPluginPrettier();
 
 const expectedError = ({
   line,
@@ -20,7 +22,7 @@ const expectedError = ({
   column
 });
 
-ruleTester.run('no-invalid-configs', rule, {
+ruleTester.run('no-invalid-config', rule, {
   valid: [
     'module.exports = undefined;',
     'module.exports = "";',
@@ -71,6 +73,27 @@ ruleTester.run('no-invalid-configs', rule, {
         {
           messageId: 'UnknownError',
           data: { message: 'config is not defined' },
+          line: 1,
+          column: 1
+        }
+      ]
+    },
+    {
+      code: dedent`
+        module.exports = {
+          plugins: ['prettier'],
+          rules: { 'prettier/erroneous-rule': 'error' }
+        }
+      `,
+      errors: [
+        {
+          messageId: 'UnknownError',
+          data: {
+            message: dedent`
+              Unable to parse error from ESLint: Error while loading rule 'prettier/erroneous-rule': explosions!
+              Occurred while linting <text>
+            `.trim()
+          },
           line: 1,
           column: 1
         }
