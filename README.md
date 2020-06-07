@@ -77,8 +77,8 @@ applies rules to files based on globs (which is what `eslint-config/rc` does),
 but while shared configs can use `overrides` there isn't a way to nicely to add
 to the glob patterns to reuse the rules. -->
 
-While the `recommended` and `rc` configurations only change in major versions,
-the `all` configuration may change in any release and is thus unsuited for
+While the `recommended-rules` and `rc` presets only change in major versions,
+the `all` preset may change in any release and is thus unsuited for
 installations requiring long-term consistency.
 
 ## Rules
