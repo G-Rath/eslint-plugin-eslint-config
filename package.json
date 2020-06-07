@@ -28,7 +28,8 @@
   },
   "files": [
     "docs/",
-    "lib/"
+    "lib/",
+    "tsconfig.fake.json"
   ],
   "scripts": {
     "build": "babel --extensions .js,.ts src --out-dir lib --copy-files",
