@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/g-rath/eslint-plugin-eslint-config/compare/v1.0.0...v1.0.1) (2020-06-07)
+
+
+### Bug Fixes
+
+* include `tsconfig.fake.json` in published package ([54818b2](https://github.com/g-rath/eslint-plugin-eslint-config/commit/54818b26275610cb3107d8cd9a916c723d453bcb))
+
 # 1.0.0 (2020-06-07)
 
 
