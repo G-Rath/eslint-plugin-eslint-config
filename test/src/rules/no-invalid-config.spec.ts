@@ -112,6 +112,7 @@ ruleTester.run('FailedToLoadModule', rule, {
           type: ESLintErrorType.FailedToLoadModule,
           name: '@typescript-eslint/eslint-parser',
           kind: 'parser',
+          path: '',
           line: 1,
           column: 28
         })
@@ -124,6 +125,7 @@ ruleTester.run('FailedToLoadModule', rule, {
           type: ESLintErrorType.FailedToLoadModule,
           name: '',
           kind: 'plugin',
+          path: '',
           line: 1,
           column: 30
         })
@@ -136,8 +138,75 @@ ruleTester.run('FailedToLoadModule', rule, {
           type: ESLintErrorType.FailedToLoadModule,
           name: 'not-react',
           kind: 'plugin',
+          path: '',
           line: 1,
           column: 30
+        })
+      ]
+    },
+    {
+      code: dedent`
+        module.exports = {
+          overrides: [
+            {
+              files: ['*.js'],
+              plugins: ['not-react']
+            }
+          ]
+        };
+      `,
+      errors: [
+        expectedError({
+          type: ESLintErrorType.FailedToLoadModule,
+          name: 'not-react',
+          kind: 'plugin',
+          path: '#overrides[0]',
+          line: 5,
+          column: 17
+        })
+      ]
+    },
+    {
+      code: dedent`
+        module.exports = {
+          overrides: [
+            {
+              files: ['*.js'],
+              parser: '@typescript-eslint/eslint-parser'
+            }
+          ]
+        };
+      `,
+      errors: [
+        expectedError({
+          type: ESLintErrorType.FailedToLoadModule,
+          name: '@typescript-eslint/eslint-parser',
+          kind: 'parser',
+          path: '#overrides[0]',
+          line: 5,
+          column: 15
+        })
+      ]
+    },
+    {
+      code: dedent`
+        module.exports = {
+          overrides: [
+            {
+              files: ['*'],
+              parser: '@typescript-eslint/eslint-parser'
+            }
+          ]
+        };
+      `,
+      errors: [
+        expectedError({
+          type: ESLintErrorType.FailedToLoadModule,
+          name: '@typescript-eslint/eslint-parser',
+          kind: 'parser',
+          path: '#overrides[0]',
+          line: 5,
+          column: 15
         })
       ]
     }
@@ -391,6 +460,26 @@ ruleTester.run('ProcessorNotFound', rule, {
           column: 31
         })
       ]
+    },
+    {
+      code: dedent`
+        module.exports = {
+          overrides: [
+            {
+              files: ['*'],
+              processor: '@typescript-eslint/processor'
+            }
+          ]
+        };
+      `,
+      errors: [
+        expectedError({
+          type: ESLintErrorType.ProcessorNotFound,
+          name: '@typescript-eslint/processor',
+          line: 5,
+          column: 18
+        })
+      ]
     }
   ]
 });
@@ -408,6 +497,7 @@ ruleTester.run('FailedToExtend', rule, {
         expectedError({
           type: ESLintErrorType.FailedToExtend,
           name: 'hello-world',
+          path: '',
           line: 1,
           column: 29
         })
@@ -419,6 +509,7 @@ ruleTester.run('FailedToExtend', rule, {
         expectedError({
           type: ESLintErrorType.FailedToExtend,
           name: 'hello-world',
+          path: '',
           line: 1,
           column: 30
         })
@@ -431,6 +522,7 @@ ruleTester.run('FailedToExtend', rule, {
         expectedError({
           type: ESLintErrorType.FailedToExtend,
           name: 'hello-world',
+          path: '',
           line: 1,
           column: 52
         })
@@ -453,6 +545,7 @@ ruleTester.run('FailedToExtend', rule, {
         expectedError({
           type: ESLintErrorType.FailedToExtend,
           name: 'hello-world',
+          path: '',
           line: 2,
           column: 26
         })
@@ -475,8 +568,25 @@ ruleTester.run('FailedToExtend', rule, {
         expectedError({
           type: ESLintErrorType.FailedToExtend,
           name: 'hello-world',
+          path: '#overrides[0]',
           line: 2,
           column: 27
+        })
+      ]
+    },
+    {
+      code: dedent`
+        module.exports = {
+          overrides: [{ files: ['*.ts'], extends: ['hello-world'] }]
+        }
+      `,
+      errors: [
+        expectedError({
+          type: ESLintErrorType.FailedToExtend,
+          name: 'hello-world',
+          path: '#overrides[0]',
+          line: 2,
+          column: 44
         })
       ]
     },
@@ -498,6 +608,7 @@ ruleTester.run('FailedToExtend', rule, {
         expectedError({
           type: ESLintErrorType.FailedToExtend,
           name: 'hello-world',
+          path: '#overrides[0]',
           line: 3,
           column: 27
         })
@@ -521,12 +632,14 @@ ruleTester.run('FailedToExtend', rule, {
         expectedError({
           type: ESLintErrorType.FailedToExtend,
           name: 'hello-world',
+          path: '#overrides[0]',
           line: 3,
           column: 27
         }),
         expectedError({
           type: ESLintErrorType.FailedToExtend,
           name: 'hello-sunshine',
+          path: '#overrides[0]',
           line: 3,
           column: 42
         })
@@ -550,14 +663,40 @@ ruleTester.run('FailedToExtend', rule, {
         expectedError({
           type: ESLintErrorType.FailedToExtend,
           name: 'hello-world',
+          path: '',
           line: 2,
           column: 13
         }),
         expectedError({
           type: ESLintErrorType.FailedToExtend,
           name: 'hello-sunshine',
+          path: '',
           line: 2,
           column: 28
+        })
+      ]
+    },
+    {
+      code: dedent`
+        module.exports = {
+          extends: ["hello-world"],
+          overrides: [{ files: ["*"], extends: ["hello-sunshine"] }]
+        }
+      `,
+      errors: [
+        expectedError({
+          type: ESLintErrorType.FailedToExtend,
+          name: 'hello-world',
+          path: '',
+          line: 2,
+          column: 13
+        }),
+        expectedError({
+          type: ESLintErrorType.FailedToExtend,
+          name: 'hello-sunshine',
+          path: '#overrides[0]',
+          line: 3,
+          column: 41
         })
       ]
     }

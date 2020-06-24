@@ -137,6 +137,7 @@ interface ESLintFailedToLoadModuleError {
   type: ESLintErrorType.FailedToLoadModule;
   kind: 'parser' | 'plugin' | string;
   name: string;
+  path: string;
 }
 
 interface ESLintInvalidRuleConfigError {
@@ -149,16 +150,19 @@ interface ESLintInvalidRuleConfigError {
 interface ESLintProcessorNotFoundError {
   type: ESLintErrorType.ProcessorNotFound;
   name: string;
+  path?: never;
 }
 
 interface ESLintFailedToExtendError {
   type: ESLintErrorType.FailedToExtend;
   name: string;
+  path: string;
 }
 
 interface ESLintInvalidConfigError {
   type: ESLintErrorType.InvalidConfig;
   reason: string;
+  path?: never;
 }
 
 export type ESLintError =
@@ -174,13 +178,13 @@ const tryParseAsFailedToLoadModuleError = (
   error: Error
 ): ESLintFailedToLoadModuleError | null => {
   // noinspection RegExpRedundantEscape
-  const [, kind, name] =
+  const [, kind, name, path] =
     /Failed to load (.+) '(.*)' declared in 'BaseConfig((?:#overrides\[\d*?\])*)': Cannot find module '/isu.exec(
       error.message.trim()
     ) ?? [];
 
   return kind //
-    ? { type: ESLintErrorType.FailedToLoadModule, kind, name }
+    ? { type: ESLintErrorType.FailedToLoadModule, kind, name, path }
     : null;
 };
 
@@ -201,13 +205,14 @@ const tryParseAsInvalidRuleConfigError = (
 const tryParseAsFailedToExtendError = (
   error: Error
 ): ESLintFailedToExtendError | null => {
-  const [, name] =
-    /Failed to load config "(.+)" to extend from./isu.exec(
+  // noinspection RegExpRedundantEscape
+  const [, name, path] =
+    /Failed to load config "(.+)" to extend from\.\nReferenced from: BaseConfig((?:#overrides\[\d*?\])*)/isu.exec(
       error.message.trim()
     ) ?? [];
 
   return name //
-    ? { type: ESLintErrorType.FailedToExtend, name }
+    ? { type: ESLintErrorType.FailedToExtend, name, path }
     : null;
 };
 
@@ -261,7 +266,7 @@ const parseESLintError = (error: Error): ESLintError => {
 
 const followErrorPathToConfig = (
   config: ESLint.Linter.Config,
-  error: ESLintInvalidRuleConfigError
+  error: ESLintError
 ): ESLint.Linter.Config => {
   if (!error.path || !config.overrides) {
     return config;
@@ -280,14 +285,16 @@ const tryRemoveErrorPointFromConfig = (
   config: ESLint.Linter.Config,
   error: ESLintError
 ): boolean => {
+  const configToDeleteFrom = followErrorPathToConfig(config, error);
+
   if (error.type === ESLintErrorType.FailedToExtend) {
-    if (typeof config.extends === 'string') {
-      delete config.extends;
+    if (typeof configToDeleteFrom.extends === 'string') {
+      delete configToDeleteFrom.extends;
 
       return true;
     }
 
-    config.extends = ensureArray(config.extends).filter(
+    configToDeleteFrom.extends = ensureArray(configToDeleteFrom.extends).filter(
       extend => extend !== error.name
     );
 
@@ -297,14 +304,14 @@ const tryRemoveErrorPointFromConfig = (
   if (error.type === ESLintErrorType.FailedToLoadModule) {
     switch (error.kind) {
       case 'plugin':
-        config.plugins = config.plugins?.filter(
+        configToDeleteFrom.plugins = configToDeleteFrom.plugins?.filter(
           plugin => plugin !== error.name
         );
 
         return true;
       case 'parser':
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete config[error.kind];
+        delete configToDeleteFrom[error.kind];
 
         return true;
 
@@ -315,13 +322,8 @@ const tryRemoveErrorPointFromConfig = (
   if (error.type === ESLintErrorType.InvalidRuleConfig) {
     const { ruleId } = error;
 
-    const configToDeleteFrom = {
-      rules: {},
-      ...followErrorPathToConfig(config, error)
-    };
-
     /* istanbul ignore if */
-    if (!(ruleId in configToDeleteFrom.rules)) {
+    if (!(configToDeleteFrom.rules && ruleId in configToDeleteFrom.rules)) {
       throw new Error('Cannot delete InvalidRuleConfig error - please report');
     }
 
