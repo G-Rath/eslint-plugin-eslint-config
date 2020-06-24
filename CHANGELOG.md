@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/g-rath/eslint-plugin-eslint-config/compare/v1.0.2...v1.0.3) (2020-06-24)
+
+
+### Bug Fixes
+
+* improve handling of errors in `overrides` config blocks ([c51cc4e](https://github.com/g-rath/eslint-plugin-eslint-config/commit/c51cc4e1282cae90531c51592abbedcba15f3269))
+
 ## [1.0.2](https://github.com/g-rath/eslint-plugin-eslint-config/compare/v1.0.1...v1.0.2) (2020-06-07)
 
 
