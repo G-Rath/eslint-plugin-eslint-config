@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/g-rath/eslint-plugin-eslint-config/compare/v1.0.3...v1.0.4) (2020-07-20)
+
+
+### Bug Fixes
+
+* remove string values from `ignorePatterns` if they exist ([8384a38](https://github.com/g-rath/eslint-plugin-eslint-config/commit/8384a38d4952571fa5e6c8c83ddb08252af55c81))
+
 ## [1.0.3](https://github.com/g-rath/eslint-plugin-eslint-config/compare/v1.0.2...v1.0.3) (2020-06-24)
 
 
