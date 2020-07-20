@@ -50,6 +50,24 @@ const compileConfigCode = (fileCode: string): ESLint.Linter.Config => {
 const createCliEngineCache = new Map<string, ESLint.CLIEngine>();
 
 const createCLIEngine = (config: ESLint.Linter.Config): ESLint.CLIEngine => {
+  const extraConfig: ESLint.Linter.Config = {
+    parserOptions: {
+      ...config.parserOptions,
+      project: require.resolve('../../tsconfig.fake.json'),
+      projectFolderIgnoreList: []
+    }
+  };
+
+  if (config.ignorePatterns) {
+    const patterns = Array.isArray(config.ignorePatterns)
+      ? config.ignorePatterns
+      : [config.ignorePatterns];
+
+    extraConfig.ignorePatterns = patterns.filter(
+      pattern => typeof pattern !== 'string'
+    );
+  }
+
   return getsertCache(
     createCliEngineCache,
     JSON.stringify(config),
@@ -62,11 +80,7 @@ const createCLIEngine = (config: ESLint.Linter.Config): ESLint.CLIEngine => {
         envs: ['node'],
         baseConfig: {
           ...config,
-          parserOptions: {
-            ...config.parserOptions,
-            project: require.resolve('../../tsconfig.fake.json'),
-            projectFolderIgnoreList: []
-          }
+          ...extraConfig
         }
       }),
     'createCLIEngine'

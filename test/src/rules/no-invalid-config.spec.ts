@@ -26,6 +26,8 @@ ruleTester.run('no-invalid-config', rule, {
   valid: [
     'module.exports = undefined;',
     'module.exports = "";',
+    'module.exports = { ignorePatterns: ["node_modules/"] }',
+    'module.exports = { ignorePatterns: "node_modules/" }',
     dedent`
       const { files } = require('./package.json');
 
@@ -744,6 +746,21 @@ ruleTester.run('InvalidConfig', rule, {
           type: ESLintErrorType.InvalidConfig,
           reason:
             '\n\t- "overrides[0]" should have required property \'files\'. Value: {"extends":["eslint:recommended"]}.',
+          line: 1,
+          column: 1
+        })
+      ]
+    },
+    {
+      code: 'module.exports = { ignorePatterns: [1] }',
+      errors: [
+        expectedError({
+          type: ESLintErrorType.InvalidConfig,
+          reason: [
+            '\n\t- Property "ignorePatterns" is the wrong type (expected string but got `[1]`).',
+            '\n\t- Property "ignorePatterns[0]" is the wrong type (expected string but got `1`).',
+            '\n\t- "ignorePatterns" should match exactly one schema in oneOf. Value: [1].'
+          ].join(''),
           line: 1,
           column: 1
         })
