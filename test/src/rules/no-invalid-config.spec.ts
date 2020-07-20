@@ -26,6 +26,8 @@ ruleTester.run('no-invalid-config', rule, {
   valid: [
     'module.exports = undefined;',
     'module.exports = "";',
+    'module.exports = { ignorePatterns: ["node_modules/"] }',
+    'module.exports = { ignorePatterns: "node_modules/" }',
     dedent`
       const { files } = require('./package.json');
 
@@ -221,12 +223,12 @@ ruleTester.run('InvalidRuleConfig', rule, {
           {
             files: ['*.tsx'],
             rules: {
-              camelcase: ['error', { allow: ['child_process'] }],
+              'no-global-assign': ['error', { exceptions: ['MyGlobal'] }],
             }
           }
         ],
         rules: {
-          camelcase: ['error', { allow: ['child_process'] }],
+          'no-global-assign': ['error', { exceptions: ['MyGlobal'] }],
         }
       };
     `
@@ -256,16 +258,16 @@ ruleTester.run('InvalidRuleConfig', rule, {
       code: dedent`
         module.exports = {
           rules: {
-            [\`camelcase\`]: ['error', { ignore: ['child_process'] }],
+            [\`no-global-assign\`]: ['error', { allow: ['MyGlobal'] }],
           }
         };
       `,
       errors: [
         expectedError({
           type: ESLintErrorType.InvalidRuleConfig,
-          ruleId: 'camelcase',
+          ruleId: 'no-global-assign',
           reason:
-            '\n\tValue {"ignore":["child_process"],"ignoreDestructuring":false,"ignoreImports":false} should NOT have additional properties.',
+            '\n\tValue {"allow":["MyGlobal"]} should NOT have additional properties.',
           path: '',
           line: 3,
           column: 6
@@ -276,16 +278,16 @@ ruleTester.run('InvalidRuleConfig', rule, {
       code: dedent`
         module.exports = {
           rules: {
-            camelcase: ['error', { ignore: ['child_process'] }],
+            'no-global-assign': ['error', { allow: ['MyGlobal'] }],
           }
         };
       `,
       errors: [
         expectedError({
           type: ESLintErrorType.InvalidRuleConfig,
-          ruleId: 'camelcase',
+          ruleId: 'no-global-assign',
           reason:
-            '\n\tValue {"ignore":["child_process"],"ignoreDestructuring":false,"ignoreImports":false} should NOT have additional properties.',
+            '\n\tValue {"allow":["MyGlobal"]} should NOT have additional properties.',
           path: '',
           line: 3,
           column: 5
@@ -302,7 +304,7 @@ ruleTester.run('InvalidRuleConfig', rule, {
                 {
                   files: ['*'],
                   rules: {
-                    camelcase: ['error', { ignore: ['child_process'] }]
+                    'no-global-assign': ['error', { allow: ['MyGlobal'] }],
                   }
                 }
               ]
@@ -313,9 +315,9 @@ ruleTester.run('InvalidRuleConfig', rule, {
       errors: [
         expectedError({
           type: ESLintErrorType.InvalidRuleConfig,
-          ruleId: 'camelcase',
+          ruleId: 'no-global-assign',
           reason:
-            '\n\tValue {"ignore":["child_process"],"ignoreDestructuring":false,"ignoreImports":false} should NOT have additional properties.',
+            '\n\tValue {"allow":["MyGlobal"]} should NOT have additional properties.',
           path: '',
           line: 9,
           column: 13
@@ -329,30 +331,30 @@ ruleTester.run('InvalidRuleConfig', rule, {
             {
               files: ['*.tsx'],
               rules: {
-                camelcase: ['error', { ignore: ['child_process'] }],
+                'no-global-assign': ['error', { allow: ['MyGlobal'] }],
               }
             }
           ],
           rules: {
-            camelcase: ['error', { ignore: ['child_process'] }],
+            'no-global-assign': ['error', { allow: ['MyGlobal'] }],
           }
         };
       `,
       errors: [
         expectedError({
           type: ESLintErrorType.InvalidRuleConfig,
-          ruleId: 'camelcase',
+          ruleId: 'no-global-assign',
           reason:
-            '\n\tValue {"ignore":["child_process"],"ignoreDestructuring":false,"ignoreImports":false} should NOT have additional properties.',
+            '\n\tValue {"allow":["MyGlobal"]} should NOT have additional properties.',
           path: '',
           line: 6,
           column: 9
         }),
         expectedError({
           type: ESLintErrorType.InvalidRuleConfig,
-          ruleId: 'camelcase',
+          ruleId: 'no-global-assign',
           reason:
-            '\n\tValue {"ignore":["child_process"],"ignoreDestructuring":false,"ignoreImports":false} should NOT have additional properties.',
+            '\n\tValue {"allow":["MyGlobal"]} should NOT have additional properties.',
           path: '#overrides[0]',
           line: 11,
           column: 5
@@ -366,30 +368,30 @@ ruleTester.run('InvalidRuleConfig', rule, {
             {
               files: ['*.tsx'],
               rules: {
-                camelcase: ['error', { ignore: ['child_process'] }],
+                'no-global-assign': ['error', { allow: ['MyGlobal'] }],
               }
             }
           ],
           rules: {
-            camelcase: ['error', { allow: ['child_process'] }],
+            'no-global-assign': ['error', { exceptions: ['MyGlobal'] }],
           }
         };
       `,
       errors: [
         expectedError({
           type: ESLintErrorType.InvalidRuleConfig,
-          ruleId: 'camelcase',
+          ruleId: 'no-global-assign',
           reason:
-            '\n\tValue {"ignore":["child_process"],"ignoreDestructuring":false,"ignoreImports":false} should NOT have additional properties.',
+            '\n\tValue {"allow":["MyGlobal"]} should NOT have additional properties.',
           path: '',
           line: 6,
           column: 9
         }),
         expectedError({
           type: ESLintErrorType.InvalidRuleConfig,
-          ruleId: 'camelcase',
+          ruleId: 'no-global-assign',
           reason:
-            '\n\tValue {"ignore":["child_process"],"ignoreDestructuring":false,"ignoreImports":false} should NOT have additional properties.',
+            '\n\tValue {"allow":["MyGlobal"]} should NOT have additional properties.',
           path: '#overrides[0]',
           line: 11,
           column: 5
@@ -403,30 +405,30 @@ ruleTester.run('InvalidRuleConfig', rule, {
             {
               files: ['*.tsx'],
               rules: {
-                camelcase: ['error', { allow: ['child_process'] }],
+                'no-global-assign': ['error', { exceptions: ['MyGlobal'] }],
               }
             }
           ],
           rules: {
-            camelcase: ['error', { ignore: ['child_process'] }],
+            'no-global-assign': ['error', { allow: ['MyGlobal'] }],
           }
         };
       `,
       errors: [
         expectedError({
           type: ESLintErrorType.InvalidRuleConfig,
-          ruleId: 'camelcase',
+          ruleId: 'no-global-assign',
           reason:
-            '\n\tValue {"ignore":["child_process"],"ignoreDestructuring":false,"ignoreImports":false} should NOT have additional properties.',
+            '\n\tValue {"allow":["MyGlobal"]} should NOT have additional properties.',
           path: '',
           line: 6,
           column: 9
         }),
         expectedError({
           type: ESLintErrorType.InvalidRuleConfig,
-          ruleId: 'camelcase',
+          ruleId: 'no-global-assign',
           reason:
-            '\n\tValue {"ignore":["child_process"],"ignoreDestructuring":false,"ignoreImports":false} should NOT have additional properties.',
+            '\n\tValue {"allow":["MyGlobal"]} should NOT have additional properties.',
           path: '#overrides[0]',
           line: 11,
           column: 5
@@ -744,6 +746,21 @@ ruleTester.run('InvalidConfig', rule, {
           type: ESLintErrorType.InvalidConfig,
           reason:
             '\n\t- "overrides[0]" should have required property \'files\'. Value: {"extends":["eslint:recommended"]}.',
+          line: 1,
+          column: 1
+        })
+      ]
+    },
+    {
+      code: 'module.exports = { ignorePatterns: [1] }',
+      errors: [
+        expectedError({
+          type: ESLintErrorType.InvalidConfig,
+          reason: [
+            '\n\t- Property "ignorePatterns" is the wrong type (expected string but got `[1]`).',
+            '\n\t- Property "ignorePatterns[0]" is the wrong type (expected string but got `1`).',
+            '\n\t- "ignorePatterns" should match exactly one schema in oneOf. Value: [1].'
+          ].join(''),
           line: 1,
           column: 1
         })
