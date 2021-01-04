@@ -22,11 +22,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Commit Linter
-        uses: wagoid/commitlint-github-action@v1.3.1
+        uses: wagoid/commitlint-github-action@v2
         with:
           configFile: './package.json'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test-node:
     name:
@@ -46,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ matrix.node-version }}
       - name: install with eslint v${{matrix.eslint-version }}
@@ -72,7 +70,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2-beta
         with:
           node-version: 12.x
       - name: install
