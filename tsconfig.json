@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["ES2015", "ES2018"],
@@ -14,6 +14,6 @@
     "forceConsistentCasingInFileNames": true
   },
   "exclude": ["node_modules", "coverage", "lib"],
-  "files": [ ".eslintrc.js" ],
-  "include": [ "**/*.js", "**/*.ts" ]
+  "files": [".eslintrc.js"],
+  "include": ["**/*.js", "**/*.ts"]
 }

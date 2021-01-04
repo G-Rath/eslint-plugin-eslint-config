@@ -77,7 +77,6 @@ export = ESLintUtils.RuleCreator(name => name)({
         [[
           AST_NODE_TYPES.Identifier,
           AST_NODE_TYPES.TemplateLiteral,
-          AST_NODE_TYPES.BigIntLiteral,
           AST_NODE_TYPES.Literal
         ].join()](
           node: TSESTree.Identifier | TSESTree.LiteralExpression

@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node-transpile-only
 
-/* eslint-disable no-sync */
+/* eslint-disable node/no-sync */
 
 import { TSESLint } from '@typescript-eslint/experimental-utils';
 import * as fs from 'fs';
@@ -18,7 +18,7 @@ interface RuleDetails {
 type RuleModule = TSESLint.RuleModule<string, unknown[]>;
 
 const requireRule = (name: string): RuleModule =>
-  // eslint-disable-next-line @typescript-eslint/no-require-imports,global-require
+  // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires,node/global-require
   require(`../src/rules/${name}`) as RuleModule;
 
 const staticElements = {
