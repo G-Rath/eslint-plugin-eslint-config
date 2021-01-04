@@ -27,8 +27,8 @@ jobs:
 
       - name: install
         run: npm ci
-      - name: prettylint
-        run: npm run prettylint
+      - name: prettier
+        run: npm run prettier:check
       - name: typecheck
         run: npm run typecheck
       - name: test
