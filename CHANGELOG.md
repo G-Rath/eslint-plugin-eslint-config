@@ -1,3 +1,17 @@
+# [2.0.0](https://github.com/g-rath/eslint-plugin-eslint-config/compare/v1.0.4...v2.0.0) (2021-01-16)
+
+
+### Features
+
+* drop support for node 8 ([369aed3](https://github.com/g-rath/eslint-plugin-eslint-config/commit/369aed3880564fd11b411e4b0657016cf57f2526))
+* update `@typescript-eslint/experimental-utils` to v4 ([790fe6e](https://github.com/g-rath/eslint-plugin-eslint-config/commit/790fe6e3a431aad77e4fa72e473515f597f0d499))
+
+
+### BREAKING CHANGES
+
+* drop support for node 8
+* update `@typescript-eslint/experimental-utils` to v4
+
 ## [1.0.4](https://github.com/g-rath/eslint-plugin-eslint-config/compare/v1.0.3...v1.0.4) (2020-07-20)
 
 
