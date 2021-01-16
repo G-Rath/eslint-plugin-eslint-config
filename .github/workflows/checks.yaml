@@ -22,11 +22,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Commit Linter
-        uses: wagoid/commitlint-github-action@v1.3.1
+        uses: wagoid/commitlint-github-action@v2
         with:
           configFile: './package.json'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test-node:
     name:
@@ -35,26 +33,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [8.x, 10.x, 12.x, 13.x, 14.x]
+        node-version: [10.x, 12.x, 13.x, 14.x]
         eslint-version: [6, 7]
-        exclude:
-          # eslint@7 doesn't support node@8
-          - node-version: 8.x
-            eslint-version: 7
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ matrix.node-version }}
       - name: install with eslint v${{matrix.eslint-version }}
         run: |
           npm ci
           npm install -D eslint@${{matrix.eslint-version }}
-      - name: prettylint
-        run: npm run prettylint
+      - name: prettier
+        run: npm run prettier:check
       - name: typecheck
         run: npm run typecheck
       - name: test
@@ -72,13 +66,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2-beta
         with:
           node-version: 12.x
       - name: install
         run: npm ci
-      - name: prettylint
-        run: npm run prettylint
+      - name: prettier
+        run: npm run prettier:check
       - name: typecheck
         run: npm run typecheck
       - name: test

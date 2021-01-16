@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2-beta
         with:
           node-version: '12.x'
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -27,8 +27,8 @@ jobs:
 
       - name: install
         run: npm ci
-      - name: prettylint
-        run: npm run prettylint
+      - name: prettier
+        run: npm run prettier:check
       - name: typecheck
         run: npm run typecheck
       - name: test

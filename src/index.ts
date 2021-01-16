@@ -10,7 +10,7 @@ const rules = readdirSync(rulesDir)
   .filter(rule => !excludedFiles.includes(rule))
   .reduce(
     (acc, curr) =>
-      // eslint-disable-next-line @typescript-eslint/no-require-imports,global-require
+      // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires,node/global-require
       Object.assign(acc, { [curr]: require(join(rulesDir, curr)) as unknown }),
     {}
   );

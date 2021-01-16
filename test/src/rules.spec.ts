@@ -7,7 +7,7 @@ const ruleNames = Object.keys(plugin.rules);
 const numberOfRules = 4;
 
 const requireRule = (name: string): TSESLint.RuleModule<string, unknown[]> =>
-  // eslint-disable-next-line @typescript-eslint/no-require-imports,global-require
+  // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires,node/global-require
   require(`../../src/rules/${name}`) as TSESLint.RuleModule<string, unknown[]>;
 
 describe('rules', () => {
@@ -126,11 +126,13 @@ describe('rules', () => {
       const recommendedLevel = meta.docs?.recommended;
 
       if (recommendedLevel) {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(presets['recommended-rules'].rules).toHaveProperty(
           rule,
           recommendedLevel
         );
       } else {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(presets['recommended-rules'].rules).not.toHaveProperty(rule);
       }
     });
