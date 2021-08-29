@@ -24,7 +24,6 @@ export = ESLintUtils.RuleCreator(name => name)({
     type: 'problem',
     docs: {
       description: 'Checks that the config exported by a file is valid',
-      category: 'Best Practices',
       recommended: 'error'
     },
     messages: {

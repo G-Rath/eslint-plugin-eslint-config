@@ -7,7 +7,6 @@ export = ESLintUtils.RuleCreator(name => name)({
     type: 'problem',
     docs: {
       description: 'Ensures that all rules are known',
-      category: 'Best Practices',
       recommended: 'error'
     },
     messages: {

@@ -1,4 +1,4 @@
-import ESLint from 'eslint';
+import { Linter, Rule } from 'eslint';
 import { readdirSync } from 'fs';
 import { join, parse } from 'path';
 
@@ -16,7 +16,7 @@ const rules = readdirSync(rulesDir)
   );
 
 const allRules = Object.keys(rules).reduce<
-  Record<string, ESLint.Linter.RuleLevel>
+  Record<string, Linter.RuleLevel>
 >(
   (theRules, key) => ({
     ...theRules,
@@ -25,7 +25,7 @@ const allRules = Object.keys(rules).reduce<
   {}
 );
 
-interface PluginConfig extends ESLint.Linter.Config {
+interface PluginConfig extends Linter.Config {
   plugins: ['eslint-config'];
 }
 
@@ -35,7 +35,7 @@ const plugin: {
     PluginConfig & Required<Pick<PluginConfig, 'rules'>>
   > &
     Record<string, PluginConfig>;
-  rules: Record<string, ESLint.Rule.RuleModule>;
+  rules: Record<string, Rule.RuleModule>;
 } = {
   configs: {
     'all': {

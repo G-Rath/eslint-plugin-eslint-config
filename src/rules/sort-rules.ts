@@ -50,7 +50,6 @@ export = ESLintUtils.RuleCreator(name => name)({
     type: 'problem',
     docs: {
       description: 'Ensures that rules are sorted in a consistent order',
-      category: 'Best Practices',
       recommended: false
     },
     fixable: 'code',
