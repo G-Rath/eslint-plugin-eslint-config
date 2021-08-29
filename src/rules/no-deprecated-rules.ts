@@ -22,7 +22,6 @@ export = ESLintUtils.RuleCreator(name => name)({
     type: 'problem',
     docs: {
       description: 'Checks for usage of deprecated eslint rules',
-      category: 'Best Practices',
       recommended: 'warn',
       suggestion: true
     },

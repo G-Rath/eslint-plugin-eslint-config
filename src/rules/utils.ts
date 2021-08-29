@@ -1,4 +1,4 @@
-import ESLint from 'eslint';
+import { CLIEngine, Linter } from 'eslint';
 import requireRelative from 'require-relative';
 import { runInNewContext } from 'vm';
 
@@ -32,9 +32,9 @@ const relativeRequire = (name: string): unknown =>
 relativeRequire.resolve = (name: string): string =>
   requireRelative.resolve(name, process.cwd());
 
-const compileConfigCodeCache = new Map<string, ESLint.Linter.Config>();
+const compileConfigCodeCache = new Map<string, Linter.Config>();
 
-const compileConfigCode = (fileCode: string): ESLint.Linter.Config => {
+const compileConfigCode = (fileCode: string): Linter.Config => {
   return getsertCache(
     compileConfigCodeCache,
     fileCode,
@@ -42,15 +42,15 @@ const compileConfigCode = (fileCode: string): ESLint.Linter.Config => {
       (runInNewContext(fileCode, {
         module: { exports: {} },
         require: relativeRequire
-      }) ?? {}) as ESLint.Linter.Config,
+      }) ?? {}) as Linter.Config,
     'compileConfigCode'
   );
 };
 
-const createCliEngineCache = new Map<string, ESLint.CLIEngine>();
+const createCliEngineCache = new Map<string, CLIEngine>();
 
-const createCLIEngine = (config: ESLint.Linter.Config): ESLint.CLIEngine => {
-  const extraConfig: ESLint.Linter.Config = {
+const createCLIEngine = (config: Linter.Config): CLIEngine => {
+  const extraConfig: Linter.Config = {
     parserOptions: {
       ...config.parserOptions,
       project: require.resolve('../../tsconfig.fake.json'),
@@ -72,7 +72,7 @@ const createCLIEngine = (config: ESLint.Linter.Config): ESLint.CLIEngine => {
     createCliEngineCache,
     JSON.stringify(config),
     () =>
-      new ESLint.CLIEngine({
+      new CLIEngine({
         useEslintrc: false,
         ignorePath: pathToBlankFile,
         ignorePattern: ['!node_modules/*'],
@@ -88,7 +88,7 @@ const createCLIEngine = (config: ESLint.Linter.Config): ESLint.CLIEngine => {
 };
 
 interface ConfigInfo {
-  deprecatedRules: ESLint.CLIEngine.DeprecatedRuleUse[];
+  deprecatedRules: CLIEngine.DeprecatedRuleUse[];
   unknownRules: string[];
   errors: ESLintError[];
 }
@@ -107,10 +107,7 @@ const ensureArray = <T>(v: T | T[] = []): T[] => (Array.isArray(v) ? v : [v]);
  * Merging is done at the top level only, and based on explicit named properties,
  * so any additional properties on either config will be lost.
  */
-const mergeConfigs = (
-  a: ESLint.Linter.Config,
-  b: ESLint.Linter.Config
-): ESLint.Linter.Config => ({
+const mergeConfigs = (a: Linter.Config, b: Linter.Config): Linter.Config => ({
   parser: b.parser ?? a.parser,
   parserOptions: { ...a.parserOptions, ...b.parserOptions },
   processor: b.processor ?? a.processor,
@@ -126,9 +123,7 @@ const mergeConfigs = (
   rules: { ...a.rules, ...b.rules }
 });
 
-const extractRelevantConfigs = (
-  config: ESLint.Linter.Config
-): ESLint.Linter.Config[] => [
+const extractRelevantConfigs = (config: Linter.Config): Linter.Config[] => [
   { ...config, overrides: [] },
   ...(config.overrides ?? [])
     .map(override =>
@@ -279,9 +274,9 @@ const parseESLintError = (error: Error): ESLintError => {
 };
 
 const followErrorPathToConfig = (
-  config: ESLint.Linter.Config,
+  config: Linter.Config,
   error: ESLintError
-): ESLint.Linter.Config => {
+): Linter.Config => {
   if (!error.path || !config.overrides) {
     return config;
   }
@@ -296,7 +291,7 @@ const followErrorPathToConfig = (
 };
 
 const tryRemoveErrorPointFromConfig = (
-  config: ESLint.Linter.Config,
+  config: Linter.Config,
   error: ESLintError
 ): boolean => {
   const configToDeleteFrom = followErrorPathToConfig(config, error);
@@ -350,9 +345,7 @@ const tryRemoveErrorPointFromConfig = (
   return false;
 };
 
-const collectConfigInfoFromESLint = (
-  config: ESLint.Linter.Config
-): ConfigInfo => {
+const collectConfigInfoFromESLint = (config: Linter.Config): ConfigInfo => {
   const theConfig = { rules: {}, ...config };
   const errors: ESLintError[] = [];
   let counter = 0;
@@ -406,7 +399,7 @@ const collectConfigInfoCache = new Map<string, ConfigInfo>();
  * Info about any `overrides` the `config` might have will be collected and
  * merged into the returned info object.
  */
-const collectConfigInfo = (config: ESLint.Linter.Config): ConfigInfo => {
+const collectConfigInfo = (config: Linter.Config): ConfigInfo => {
   return getsertCache(
     collectConfigInfoCache,
     JSON.stringify(config),

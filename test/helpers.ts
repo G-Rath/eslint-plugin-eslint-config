@@ -80,7 +80,6 @@ export const mockEslintPluginPrettier = (): void => {
             type: 'problem',
             docs: {
               description: 'Fake rule that is deprecated, for use in testing',
-              category: 'Best Practices',
               recommended: 'warn'
             },
             deprecated: true,
@@ -99,7 +98,6 @@ export const mockEslintPluginPrettier = (): void => {
             type: 'problem',
             docs: {
               description: 'Fake rule that always throws, for use in testing',
-              category: 'Best Practices',
               recommended: 'warn'
             },
             messages: {},
