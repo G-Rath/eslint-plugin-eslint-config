@@ -48,6 +48,9 @@ Then configure the rules you want to use _for your config(s)_ using `overrides`:
 ```
 
 The rules assume that the files they're linting are configs meant for ESLint.
+Also note that while ESLint can be configured using JSON and YAML files, it
+doesn't support linting those file types meaning this plugin will not work if
+you're not using a `.js` config file.
 
 ## Shareable configurations
 
