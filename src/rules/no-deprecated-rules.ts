@@ -26,6 +26,7 @@ export = ESLintUtils.RuleCreator(name => name)({
       recommended: 'warn',
       suggestion: true
     },
+    hasSuggestions: true,
     messages: {
       deprecatedRule:
         "'{{ ruleId }}' is deprecated in favor of '{{ replacedBy }}'",

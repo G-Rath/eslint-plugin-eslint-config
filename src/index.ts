@@ -5,6 +5,18 @@ import { join, parse } from 'path';
 const rulesDir = join(__dirname, 'rules');
 const excludedFiles = ['utils', 'prefer-valid-rules', 'no-unneeded-rules'];
 
+declare module '@typescript-eslint/experimental-utils/dist/ts-eslint/Rule' {
+  export interface RuleMetaDataDocs {
+    category: 'Best Practices' | 'Possible Errors';
+    suggestion?: boolean;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export interface RuleMetaData<TMessageIds extends string> {
+    hasSuggestions?: boolean;
+  }
+}
+
 const rules = readdirSync(rulesDir)
   .map(rule => parse(rule).name)
   .filter(rule => !excludedFiles.includes(rule))
