@@ -518,8 +518,7 @@ ruleTester.run('FailedToExtend', rule, {
       ]
     },
     {
-      code:
-        'module.exports = { extends: ["eslint:recommended", "hello-world"] }',
+      code: 'module.exports = { extends: ["eslint:recommended", "hello-world"] }',
       errors: [
         expectedError({
           type: ESLintErrorType.FailedToExtend,
